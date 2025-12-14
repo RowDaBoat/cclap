@@ -83,6 +83,8 @@ Options     Type                          Default                Help
 ```
 
 ## (Tentative) Roadmap
+- [ ] Synthesise "Usage" message
+- [ ] Get the help text from # comments?
 - [ ] Parse non-option command line arguments?
 - [ ] Support for environment variables?
 - [ ] Multiple lines support for help messages?
