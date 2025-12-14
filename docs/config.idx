@@ -1,0 +1,6 @@
+nimTitle	config	config.html	module src/config		0
+nim	Config	config.html#Config	object Config		4
+nim	Args	config.html#Args	ConfigSource.Args		11
+nim	ConfigFile	config.html#ConfigFile	ConfigSource.ConfigFile		11
+nim	Default	config.html#Default	ConfigSource.Default		11
+nim	ConfigSource	config.html#ConfigSource	enum ConfigSource		11
