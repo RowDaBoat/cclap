@@ -103,7 +103,7 @@ proc setFieldValue[T](name: string, fieldValue: var T, strValue: string, chosen:
 
 
 proc stringType[T](value: T): string =
-  const listDescription = "',' separated list of: "
+  const listDescription = "',' separated list of"
 
   when value is bool:
     return "true|false"
@@ -116,15 +116,15 @@ proc stringType[T](value: T): string =
   elif value is enum:
     return showEnum(value)
   elif value is seq[bool]:
-    return listDescription & "true|false"
+    return listDescription & ": true|false"
   elif value is seq[int]:
-    return listDescription & "int number"
+    return listDescription & " int numbers"
   elif value is seq[float]:
-    return listDescription & "float number"
+    return listDescription & " float numbers"
   elif value is seq[string]:
-    return listDescription & "text"
+    return listDescription & " texts"
   elif value is seq[enum]:
-    return listDescription & showEnumList(value)
+    return listDescription & ": " & showEnumList(value)
 
 
 proc stringDefault[T](value: T): string =

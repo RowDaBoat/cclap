@@ -78,7 +78,7 @@ Options     Type                          Default                Help
 --str       text                          Hello                  String arguments
 --number    int number                    10                     Float or int arguments
 --options   yes|no|maybe                  yes                    Enums work too
---list      ',' separated list of: text   "one", "two", "three"  Lists are also supported
+--list      ',' separated list of text    "one", "two", "three"  Lists are also supported
 -s,--short  true|false                    false                  Short options
 ```
 
@@ -87,3 +87,4 @@ Options     Type                          Default                Help
 - [ ] Support for environment variables?
 - [ ] Multiple lines support for help messages?
 - [ ] Support other configuration formats?
+- [ ] Support overriding the type name in the help message?
