@@ -26,7 +26,7 @@ var cli = initCclap(Configuration(
   name: @["world"],
   enclose: none
 ))
-discard cli.parseArgs(commandLineParams())
+discard cli.parseOptions(commandLineParams())
 let configuration = cli.config()
 
 

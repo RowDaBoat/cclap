@@ -103,7 +103,7 @@ proc setFieldValue[T](name: string, fieldValue: var T, strValue: string, chosen:
 
 
 proc stringType[T](value: T): string =
-  const listDescription = "',' sepparated list of: "
+  const listDescription = "',' separated list of: "
 
   when value is bool:
     return "true|false"
@@ -160,7 +160,7 @@ proc initCclap*[T: object](default: T = default(T)): Cclap[T] =
   )
 
 
-proc parseArgs*[T: object](self: var Cclap[T], args: seq[string]): seq[string] =
+proc parseOptions*[T: object](self: var Cclap[T], args: seq[string]): seq[string] =
   ## Parse command line options, the result is the remaining arguments from the first non-option argument.
   ## raises an `InvalidShortOptions` error if the short options are ill-formed ex: -abc=def.
 

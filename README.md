@@ -4,10 +4,10 @@ From a single configuration object definition, `cclap` can:
 - parse options from command line arguments in long (`--opt`) and short (`-o`) forms.
 - parse settings from a configuration file.
 - get defaults from an instance of the configuration object.
-- get a merged configuration object prioritizing in that order: command line arguments, configurations and defaults.
+- get a merged configuration object prioritizing in the following order: command line arguments, configurations, and defaults.
 - build a help message detailing each option, their types, default values, and usage.
 
-`cclap` is not designed to take over, resolve and/or automate every possible use case of a command line application, but as a non-intrusive tool to simplify the creation of one.
+`cclap` is not designed to take over, resolve, and/or automate every possible use case of a command line application, but rather serves as a non-intrusive tool to simplify the creation of one.
 
 
 ## Documentation
@@ -15,10 +15,9 @@ The API reference is available [here](https://rowdaboat.github.io/cclap/).
 
 
 ### Usage
-
 ```nim
 # Define the configuration object
-type Choice = enum Yes, No, Maybe
+type Choice = enum yes, no, maybe
 
 type Configuration = object
   flag    {.help: "flags".}                           : bool
@@ -34,7 +33,7 @@ let defaults = Configuration(
   flag: false,
   str: "Hello",
   number: 10,
-  options: Choice.Yes,
+  options: Choice.yes,
   list: @["one", "two", "three"],
   short: false
 )
@@ -42,15 +41,15 @@ let defaults = Configuration(
 var cclap = initCclap(defaults)
 ```
 ```nim
-# Command line arguments are parsed up to the first non-option one, returning the remaining arguments
-let remainingArgs = cclap.parseArgs(commandLineParams())
+# Command line arguments are parsed up to the first non-option argument, returning the remaining ones
+let remainingArgs = cclap.parseOptions(commandLineParams())
 ```
 ```bash
 # A command line for this example looks like this
 ./example --flag --str="Hello World" --number=10 --options=Maybe --list=one,two,three -s
 ```
 ```nim
-# Parse configurations, tipically obtained from a configuration file
+# Parse configurations, typically obtained from a configuration file
 cclap.parseConfig(readFile("config.ini"))
 ```
 ```ini
@@ -78,7 +77,13 @@ Options     Type                          Default                Help
 --flag      true|false                    false                  flags
 --str       text                          Hello                  String arguments
 --number    int number                    10                     Float or int arguments
---options   Yes|No|Maybe                  Yes                    Enums work too
---list      ',' sepparated list of: text  "one", "two", "three"  Lists are also supported
+--options   yes|no|maybe                  yes                    Enums work too
+--list      ',' separated list of: text   "one", "two", "three"  Lists are also supported
 -s,--short  true|false                    false                  Short options
 ```
+
+## (Tentative) Roadmap
+- [ ] Parse non-option command line arguments?
+- [ ] Support for environment variables?
+- [ ] Multiple lines support for help messages?
+- [ ] Support other configuration formats?
