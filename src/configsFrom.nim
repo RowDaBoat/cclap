@@ -47,7 +47,6 @@ proc getHelp(pragma: NimNode): string =
     error "cclap: help pragma must have a single argument"
 
   let helpMsg = pragma[1]
-
   if not (helpMsg.kind in {nnkStrLit, nnkRStrLit, nnkTripleStrLit}):
     error "cclap: help pragma must have a string argument"
 
@@ -65,33 +64,54 @@ proc getShortOption(pragma: NimNode): char =
   result = chr(shortOptChar.intVal)
 
 
-proc processPragmas(pragmas: NimNode): (string, char) =
+proc getMode(pragma: NimNode): Mode =
+  if (pragma.kind != nnkCall and pragma.kind != nnkExprColonExpr) or pragma.len != 2:
+    error "cclap: mode pragma must have a single argument"
+
+  let modeNode = pragma[1]
+  if modeNode.kind != nnkSym:
+    error "cclap: mode pragma must be an enum value, " & $modeNode.kind
+
+  let modeStr = $modeNode
+  case modeStr
+  of "option": result = Mode.option
+  of "config": result = Mode.config
+  of "both": result = Mode.both
+  else: error "cclap: invalid mode pragma value '" & modeStr & "'"
+
+
+proc processPragmas(pragmas: NimNode): (string, char, Mode) =
   var helpText = ""
   var shortOpt = '\0'
+  var mode = Mode.both
 
   for pragma in pragmas:
     if $pragma[0] == "help":
       helpText &= getHelp(pragma)
     elif $pragma[0] == "shortOption":
       shortOpt = getShortOption(pragma)
+    elif $pragma[0] == "mode":
+      mode = getMode(pragma)
 
-  return (helpText, shortOpt)
+  return (helpText, shortOpt, mode)
 
 
-proc addd(configs: NimNode, field: NimNode): NimNode =
+proc configFrom(configs: NimNode, field: NimNode): NimNode =
   var (names, pragmas) = namesAndPragmas(field)
   var fieldName = getFieldName(names)
-  var shortOpt = '\0'
   var helpText = ""
+  var shortOpt = '\0'
+  var mode = Mode.both
 
   if pragmas != nil and pragmas.kind == nnkPragma:
-    (helpText, shortOpt) = processPragmas(pragmas)
+    (helpText, shortOpt, mode) = processPragmas(pragmas)
 
   result = quote do:
     `configs`.add(Config(
       long: `fieldName`,
       short: `shortOpt`,
-      help: `helpText`
+      help: `helpText`,
+      mode: `mode`
     ))
 
 
@@ -107,6 +127,6 @@ macro configsFrom*(T: typedesc): untyped =
 
   for field in fields:
     if field.kind == nnkIdentDefs:
-      result.add addd(configs, field)
+      result.add configFrom(configs, field)
 
   result.add(configs)

@@ -12,12 +12,33 @@ type Enclose = enum none, paren, brackets, braces, angle
 type Emojis = enum happy, world, fire, wave
 
 type Configuration = object
-  help      {.help: "Show this help", shortOption: 'h'.}       : bool
-  uppercase {.help: "Uppercase the output", shortOption: 'u'.} : bool
-  times     {.help: "Times to repeat", shortOption: 't'.}      : int
-  name      {.help: "Names to salute".}                        : seq[string]
-  enclose   {.help: "Enclose the output".}                     : Enclose
-  emoji     {.help: "Use emojis in salutation".}               : seq[Emojis]
+  help {.
+    help: "Show this help",
+    shortOption: 'h',
+    mode: option
+  .} : bool
+
+  uppercase {.
+    help: "Uppercase the output",
+    shortOption: 'u',
+  .} : bool
+
+  times {.
+    help: "Times to repeat",
+    shortOption: 't'
+  .} : int
+
+  name {.
+    help: "Names to salute"
+  .} : seq[string]
+
+  enclose {.
+    help: "Enclose the output"
+  .} : Enclose
+
+  emoji {.
+    help: "Use emojis in salutation"
+  .} : seq[Emojis]
 
 
 var cli = initCclap(Configuration(
@@ -37,7 +58,7 @@ for config in cli.unknownConfigs():
   echo "Warning: unknown configuration: ", config
 
 if configuration.help:
-  echo cli.help()
+  echo cli.generateHelp()
   quit(0)
 
 let enclosers = {
@@ -62,3 +83,5 @@ for i in 0..<configuration.times:
   var salutation = if configuration.uppercase: salute.toUpper else: salute
   var emoji = configuration.emoji.mapIt(emojis[it]).join("")
   echo open & salutation & emoji & close
+
+echo cli.generateConfig()

@@ -1,11 +1,13 @@
 # ISC License
 # Copyright (c) 2025 RowDaBoat
 
+type ConfigSource* = enum Args, ConfigFile, Default
+type Mode* = enum option, config, both
+
 type Config* = object
   long*: string
   short*: char
   typ*: string
   default*: string
   help*: string
-
-type ConfigSource* = enum Args, ConfigFile, Default
+  mode*: Mode

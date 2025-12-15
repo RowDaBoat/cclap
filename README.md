@@ -64,12 +64,12 @@ short
 ```
 ```nim
 # Get the final merged configuration object
-let configuration = cclap.config()
+let configuration = cclap.generateConfig()
 ```
 
 ```nim
 # Get a help message for the defined configuration
-let help = cclap.help()
+let help = cclap.generateHelp()
 ```
 ```
 # The help message looks like this:
@@ -83,8 +83,10 @@ Options     Type                          Default                Help
 ```
 
 ## (Tentative) Roadmap
-- [ ] Synthesise "Usage" message
-- [ ] Get the help text from # comments?
+- [x] Generate default config file contents
+- [x] Allow excluding some config from the options, or the config file
+- [ ] Generate "Usage" message
+- [ ] Mandatory options?
 - [ ] Parse non-option command line arguments?
 - [ ] Support for environment variables?
 - [ ] Multiple lines support for help messages?

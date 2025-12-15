@@ -9,9 +9,9 @@ import sequtils
 import macros
 import configsFrom
 import config
-import help
+import generators
 import errors
-
+export Mode
 
 type Cclap*[T] = object
   namesInOrder: seq[string]
@@ -22,11 +22,15 @@ type Cclap*[T] = object
 
 
 template help*(message: string) {.pragma.}
-  ## Help message for the option.
+  ## Help message for the configuration field.
 
 
 template shortOption*(opt: char) {.pragma.}
-  ## Short option alternative for the option.
+  ## Short option alternative for the configuration field.
+
+
+template mode*(mode: Mode) {.pragma.}
+  ## Mode pragma for the configuration field.
 
 
 proc parseLongOption(arg: string, args: var Table[string, string]) =
@@ -64,38 +68,38 @@ proc showEnumList[T: enum](value: seq[T]): string =
   showEnum(default(T))
 
 
-proc setFieldValue[T](name: string, fieldValue: var T, strValue: string, chosen: ConfigSource) =
-  if chosen == Default:
+proc setFieldValue[T](name: string, fieldValue: var T, strValue: string, source: ConfigSource) =
+  if source == Default:
     return
 
   var stripped = strValue.strip
 
   when fieldValue is bool:
     try: fieldValue = parseBool(stripped)
-    except: invalidValue(name, stripped, chosen, "is not true or false")
+    except: invalidValue(name, stripped, source, "is not true or false")
   elif fieldValue is int:
     try: fieldValue = parseInt(stripped)
-    except: invalidValue(name, stripped, chosen, "is not an integer number")
+    except: invalidValue(name, stripped, source, "is not an integer number")
   elif fieldValue is float:
     try: fieldValue = parseFloat(stripped)
-    except: invalidValue(name, stripped, chosen, "is not a floating point number")
+    except: invalidValue(name, stripped, source, "is not a floating point number")
   elif fieldValue is enum:
     try: fieldValue = parseEnum[typeof(fieldValue)](stripped)
-    except: invalidValue(name, stripped, chosen, "is not one of: " & showEnum(fieldValue))
+    except: invalidValue(name, stripped, source, "is not one of: " & showEnum(fieldValue))
   elif fieldValue is string:
     fieldValue = stripped
   elif fieldValue is seq[bool]:
     try: fieldValue = strValue.split(",").mapIt(parseBool(it.strip))
-    except: invalidValue(name, strValue, chosen, "contains elements that are not true or false")
+    except: invalidValue(name, strValue, source, "contains elements that are not true or false")
   elif fieldValue is seq[int]:
     try: fieldValue = strValue.split(",").mapIt(parseInt(it.strip))
-    except: invalidValue(name, strValue, chosen, "contains elements that are not integer numbers")
+    except: invalidValue(name, strValue, source, "contains elements that are not integer numbers")
   elif fieldValue is seq[float]:
     try: fieldValue = strValue.split(",").mapIt(parseFloat(it.strip))
-    except: invalidValue(name, strValue, chosen, "contains elements that are not floating point numbers")
+    except: invalidValue(name, strValue, source, "contains elements that are not floating point numbers")
   elif fieldValue is seq[enum]:
     try: fieldValue = strValue.split(",").mapIt(parseEnum[typeof(fieldValue[0])](it.strip))
-    except: invalidValue(name, strValue, chosen, "contains elements that are not one of: " & showEnumList(fieldValue))
+    except: invalidValue(name, strValue, source, "contains elements that are not one of: " & showEnumList(fieldValue))
   elif fieldValue is seq[string]:
     fieldValue = strValue.split(",").mapIt(it.strip)
   else:
@@ -209,26 +213,28 @@ proc config*[T: object](self: var Cclap[T]): T =
   ## Get the parsed configurations into a configuration object.
   ## Arguments, configurations and defaults, are merged in that order of priority.
   ## raises an `InvalidValue` error if an option of an argument or configuration is not valid for the field type.
-  ## 
 
   result = self.default
 
   for name, value in result.fieldPairs:
-    var chosen = Default
+    var source = Default
     var stringValue = ""
-    var short = self.configDefinitions[name].short
+    let definition = self.configDefinitions[name]
+    let isOption = definition.mode in {Mode.option, Mode.both}
+    let isConfig = definition.mode in {Mode.config, Mode.both}
+    let short = definition.short
 
-    if name in self.args:
-      chosen = Args
+    if isOption and name in self.args:
+      source = Args
       stringValue = self.args[name]
-    elif short != '\0' and $short in self.args:
-      chosen = Args
+    elif isOption and short != '\0' and $short in self.args:
+      source = Args
       stringValue = self.args[$short]
-    elif name in self.configs:
-      chosen = ConfigFile
+    elif isConfig and name in self.configs:
+      source = ConfigFile
       stringValue = self.configs[name]
 
-    setFieldValue(name, value, stringValue, chosen)
+    setFieldValue(name, value, stringValue, source)
 
 
 proc unknownArgs*[T](self: var Cclap[T]): seq[string] =
@@ -247,5 +253,11 @@ proc unknownConfigs*[T](self: var Cclap[T]): seq[string] =
       result.add(config)
 
 
-proc help*[T: object](self: Cclap[T]): string =
-  return buildHelp(self.namesInOrder, self.configDefinitions)
+proc generateConfig*[T: object](self: Cclap[T]): string =
+  ## Generate a default configuration file for the defined settings.
+  generateConfig(self.namesInOrder, self.configDefinitions)
+
+
+proc generateHelp*[T: object](self: Cclap[T]): string =
+  ## Generate a help message for the defined command line options. 
+  generateHelp(self.namesInOrder, self.configDefinitions)
