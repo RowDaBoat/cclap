@@ -89,19 +89,19 @@ proc setFieldValue[T](name: string, fieldValue: var T, strValue: string, source:
   elif fieldValue is string:
     fieldValue = stripped
   elif fieldValue is seq[bool]:
-    try: fieldValue = strValue.split(",").mapIt(parseBool(it.strip))
-    except: invalidValue(name, strValue, source, "contains elements that are not true or false")
+    try: fieldValue = stripped.split(",").mapIt(parseBool(it.strip))
+    except: invalidValue(name, stripped, source, "contains elements that are not true or false")
   elif fieldValue is seq[int]:
-    try: fieldValue = strValue.split(",").mapIt(parseInt(it.strip))
-    except: invalidValue(name, strValue, source, "contains elements that are not integer numbers")
+    try: fieldValue = stripped.split(",").mapIt(parseInt(it.strip))
+    except: invalidValue(name, stripped, source, "contains elements that are not integer numbers")
   elif fieldValue is seq[float]:
-    try: fieldValue = strValue.split(",").mapIt(parseFloat(it.strip))
-    except: invalidValue(name, strValue, source, "contains elements that are not floating point numbers")
+    try: fieldValue = stripped.split(",").mapIt(parseFloat(it.strip))
+    except: invalidValue(name, stripped, source, "contains elements that are not floating point numbers")
   elif fieldValue is seq[enum]:
-    try: fieldValue = strValue.split(",").mapIt(parseEnum[typeof(fieldValue[0])](it.strip))
-    except: invalidValue(name, strValue, source, "contains elements that are not one of: " & showEnumList(fieldValue))
+    try: fieldValue = stripped.split(",").mapIt(parseEnum[typeof(fieldValue[0])](it.strip))
+    except: invalidValue(name, stripped, source, "contains elements that are not one of: " & showEnumList(fieldValue))
   elif fieldValue is seq[string]:
-    fieldValue = strValue.split(",").mapIt(it.strip)
+    fieldValue = stripped.split(",").mapIt(it.strip)
   else:
     {.error: "cclap: '" & $typeof(fieldValue) & "' is not supported for field: '" & name & "'."}
 
@@ -237,7 +237,7 @@ proc config*[T: object](self: var Cclap[T]): T =
     setFieldValue(name, value, stringValue, source)
 
 
-proc unknownArgs*[T](self: var Cclap[T]): seq[string] =
+proc unknownOptions*[T](self: var Cclap[T]): seq[string] =
   ## Get the user's arguments that do not belong to the configuration object.
 
   for arg in self.args.keys:

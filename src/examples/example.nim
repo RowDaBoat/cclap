@@ -30,10 +30,13 @@ type Configuration = object
 
   name {.
     help: "Names to salute"
+#    required
+#    usage
   .} : seq[string]
 
   enclose {.
     help: "Enclose the output"
+#    usage: "brackets"
   .} : Enclose
 
   emoji {.
@@ -79,9 +82,9 @@ let emojis = {
 for i in 0..<configuration.times:
   let salute = "Hello " & configuration.name.join(", ") & "!"
   let encloser = enclosers[configuration.enclose]
-  var (open, close) = if encloser.len == 2: ($encloser[0], $encloser[1]) else: ("", "")
-  var salutation = if configuration.uppercase: salute.toUpper else: salute
-  var emoji = configuration.emoji.mapIt(emojis[it]).join("")
+  let (open, close) = if encloser.len == 2: ($encloser[0], $encloser[1]) else: ("", "")
+  let salutation = if configuration.uppercase: salute.toUpper else: salute
+  let emoji = configuration.emoji.mapIt(emojis[it]).join("")
   echo open & salutation & emoji & close
 
 echo cli.generateConfig()

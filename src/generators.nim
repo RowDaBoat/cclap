@@ -7,6 +7,10 @@ import sequtils
 import strutils
 
 
+proc generateUsage*(namesInOrder: seq[string]): string =
+  discard
+
+
 proc generateConfig*(namesInOrder: seq[string], definitions: Table[string, Config]): string =
   var table: seq[(string, string, string)]
   var configWidth = 0
