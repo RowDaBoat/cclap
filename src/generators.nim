@@ -26,6 +26,7 @@ proc generateUsage*(program: string, namesInOrder: seq[string], definitions: Tab
 
       result &= " " & usage
 
+
 proc generateConfig*(namesInOrder: seq[string], definitions: Table[string, Config]): string =
   for name in namesInOrder:
     var config = definitions[name]

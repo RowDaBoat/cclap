@@ -85,8 +85,8 @@ Options     Type                          Default                Help
 ## (Tentative) Roadmap
 - [x] Generate default config file contents
 - [x] Allow excluding some config from the options, or the config file
-- [x] Generate "Usage" message
-- [ ] Required options?
+- [x] Generate 'usage' message
+- [x] Required options
 - [ ] Parse non-option command line arguments?
 - [ ] Support for environment variables?
 - [ ] Multiple lines support for help messages?

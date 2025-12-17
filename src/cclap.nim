@@ -3,15 +3,16 @@
 
 import strutils
 import strformat
-import tables
-import typetraits
 import sequtils
+import tables
+import sets
+import os
+import typetraits
 import macros
 import configsFrom
 import config
 import generators
 import errors
-import os
 
 export Mode
 
@@ -271,21 +272,30 @@ proc config*[T: object](self: var Cclap[T]): T =
 proc unknownOptions*[T](self: var Cclap[T]): seq[string] =
   ## Get the user's arguments that are not listed as options in the configuration object.
 
-  for arg in self.args.keys:
-    let optionModes = { Mode.option, Mode.both }
+  let optionModes = { Mode.option, Mode.both }
+  let knownOptions = self.configDefinitions.values.toSeq
+    .filterIt(it.mode in optionModes)
+    .mapIt(@[it.long] & (if it.short != '\0': @[$it.short] else: @[]))
+    .concat()
+    .toHashSet()
 
-    if arg notin self.configDefinitions or self.configDefinitions[arg].mode notin optionModes:
+  for arg in self.args.keys:
+    if arg notin knownOptions:
       result.add(arg)
 
 
 proc unknownConfigs*[T](self: var Cclap[T]): seq[string] =
   ## Get the user's configurations that do not belong to the configuration object.
 
-  for config in self.configs.keys:
-    let configModes = { Mode.config, Mode.both }
+  let configModes = { Mode.config, Mode.both }
+  let knownConfigs = self.configDefinitions.values.toSeq
+    .filterIt(it.mode in configModes)
+    .mapIt(it.long)
+    .toHashSet()
 
-    if config notin self.configDefinitions or self.configDefinitions[config].mode notin configModes:
-      result.add(config)
+  for arg in self.configs.keys:
+    if arg notin knownConfigs:
+      result.add(arg)
 
 
 proc unmetRequirments*[T](self: var Cclap[T]): seq[string] =
