@@ -13,28 +13,26 @@ proc generateUsage*(program: string, namesInOrder: seq[string], definitions: Tab
 
   for name in namesInOrder:
     var config = definitions[name]
+    var usage = ""
 
-    if config.usage.isSome and config.usage.get == "":
-      result &= " --" & config.long
-    elif config.usage.isSome:
-      result &= " --" & config.long & "=" & config.usage.get
+    if config.usage.isSome:
+      usage &= "--" & config.long
 
+      if config.usage.get != "":
+        usage &= "=" & config.usage.get
+
+      if not config.required:
+        usage = "[" & usage & "]"
+
+      result &= " " & usage
 
 proc generateConfig*(namesInOrder: seq[string], definitions: Table[string, Config]): string =
-  var table: seq[(string, string, string)]
-  var configWidth = 0
-
   for name in namesInOrder:
     var config = definitions[name]
 
     if config.mode in {Mode.config, Mode.both}:
-      configWidth = max(configWidth, config.long.len)
-      table.add((config.long, config.default, config.help))
-
-  for (config, default, help) in table:
-    result &= "# " & help & "\n"
-    let alignedConfig = config.alignLeft(configWidth)
-    result &= "# " & alignedConfig & " = " & default & " \n\n"
+      result &= "# " & config.help & "\n"
+      result &= "# " & config.long & " = " & config.default & " \n\n"
 
 
 proc generateHelp*(namesInOrder: seq[string], definitions: Table[string, Config]): string =

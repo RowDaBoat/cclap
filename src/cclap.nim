@@ -40,6 +40,10 @@ template usage*(usage: string) {.pragma.}
   ## Usage example for the configuration field.
 
 
+template required*() {.pragma.}
+  ## Required pragma for the configuration field.
+
+
 proc parseLongOption(arg: string, args: var Table[string, string]) =
   let split = arg.split("=", maxsplit=1)
   let name = split[0][2..^1]
@@ -216,6 +220,26 @@ proc parseConfig*[T: object](self: var Cclap[T], config: string) =
       self.configs[name] = config[1].strip
 
 
+proc checkRequirement*[T: object](self: var Cclap[T], definition: Config): bool =
+  let long = definition.long
+  let short = $definition.short
+
+  let longOptionPresent = long in self.args
+  let shortOptionPresent = short.len > 0 and short in self.args
+  let configPresent = long in self.configs
+
+  let satisfiedOption = definition.mode == Mode.option and
+    (longOptionPresent or shortOptionPresent)
+
+  let satisfiedConfig = definition.mode == Mode.config and
+    configPresent
+
+  let satisfiedBoth = definition.mode == Mode.both and
+    (longOptionPresent or shortOptionPresent or configPresent)
+
+  result = satisfiedOption or satisfiedConfig or satisfiedBoth
+
+
 proc config*[T: object](self: var Cclap[T]): T =
   ## Get the parsed configurations into a configuration object.
   ## Arguments, configurations and defaults, are merged in that order of priority.
@@ -245,10 +269,12 @@ proc config*[T: object](self: var Cclap[T]): T =
 
 
 proc unknownOptions*[T](self: var Cclap[T]): seq[string] =
-  ## Get the user's arguments that do not belong to the configuration object.
+  ## Get the user's arguments that are not listed as options in the configuration object.
 
   for arg in self.args.keys:
-    if not (arg in self.configDefinitions):
+    let optionModes = { Mode.option, Mode.both }
+
+    if arg notin self.configDefinitions or self.configDefinitions[arg].mode notin optionModes:
       result.add(arg)
 
 
@@ -256,8 +282,18 @@ proc unknownConfigs*[T](self: var Cclap[T]): seq[string] =
   ## Get the user's configurations that do not belong to the configuration object.
 
   for config in self.configs.keys:
-    if not (config in self.configDefinitions):
+    let configModes = { Mode.config, Mode.both }
+
+    if config notin self.configDefinitions or self.configDefinitions[config].mode notin configModes:
       result.add(config)
+
+
+proc unmetRequirments*[T](self: var Cclap[T]): seq[string] =
+  ## Get the user's arguments that are required but not provided.
+
+  for definition in self.configDefinitions.values:
+    if definition.required and not self.checkRequirement(definition):
+      result.add(definition.long)
 
 
 proc generateUsage*[T: object](self: Cclap[T]): string =

@@ -92,14 +92,17 @@ proc getUsage(pragma: NimNode): Option[string] =
   result = if pragma.len == 1: none[string]() else: some(usageText.strVal)
 
 
-proc processPragmas(pragmas: NimNode): (string, char, Mode, Option[string]) =
+proc processPragmas(pragmas: NimNode): (string, char, Mode, Option[string], bool) =
   var helpText = ""
   var shortOpt = '\0'
   var mode = Mode.both
   var usage = none[string]()
+  var required = false
 
   for pragma in pragmas:
-    if $pragma[0] == "help":
+    if pragma.kind == nnkSym and $pragma == "required":
+      required = true
+    elif $pragma[0] == "help":
       helpText &= getHelp(pragma)
     elif $pragma[0] == "shortOption":
       shortOpt = getShortOption(pragma)
@@ -108,7 +111,7 @@ proc processPragmas(pragmas: NimNode): (string, char, Mode, Option[string]) =
     elif $pragma[0] == "usage":
       usage = getUsage(pragma)
 
-  return (helpText, shortOpt, mode, usage)
+  return (helpText, shortOpt, mode, usage, required)
 
 
 proc configFrom(configs: NimNode, field: NimNode): NimNode =
@@ -118,9 +121,10 @@ proc configFrom(configs: NimNode, field: NimNode): NimNode =
   var shortOpt = '\0'
   var mode = Mode.both
   var usage = none[string]()
+  var required = false
 
   if pragmas != nil and pragmas.kind == nnkPragma:
-    (helpText, shortOpt, mode, usage) = processPragmas(pragmas)
+    (helpText, shortOpt, mode, usage, required) = processPragmas(pragmas)
 
   result = quote do:
     `configs`.add(Config(
@@ -128,7 +132,8 @@ proc configFrom(configs: NimNode, field: NimNode): NimNode =
       short: `shortOpt`,
       help: `helpText`,
       mode: `mode`,
-      usage: `usage`
+      usage: `usage`,
+      required: `required`
     ))
 
 

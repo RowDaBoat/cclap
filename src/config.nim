@@ -15,3 +15,4 @@ type Config* = object
   help*: string
   mode*: Mode
   usage*: Option[string]
+  required*: bool

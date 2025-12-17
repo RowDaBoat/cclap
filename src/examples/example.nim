@@ -31,7 +31,7 @@ type Configuration = object
 
   name {.
     help: "Names to salute"
-#    required
+    required
     usage: "name1,...,nameN"
   .} : seq[string]
 
@@ -62,7 +62,15 @@ for arg in cli.unknownOptions():
 for config in cli.unknownConfigs():
   echo "Warning: unknown configuration: ", config
 
+let unmetRequirements = cli.unmetRequirments()
+if unmetRequirements.len > 0:
+  echo "Error: missing required options: ", unmetRequirements.join(", "), "\n"
+  echo cli.generateUsage()
+  echo cli.generateHelp()
+  quit(1)
+
 if configuration.help:
+  echo cli.generateUsage()
   echo cli.generateHelp()
   quit(0)
 
@@ -89,5 +97,4 @@ for i in 0..<configuration.times:
   let emoji = configuration.emoji.mapIt(emojis[it]).join("")
   echo open & salutation & emoji & close
 
-echo cli.generateUsage()
 echo cli.generateConfig()
