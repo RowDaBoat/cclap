@@ -26,21 +26,23 @@ type Configuration = object
   times {.
     help: "Times to repeat",
     shortOption: 't'
+    usage: "1"
   .} : int
 
   name {.
     help: "Names to salute"
 #    required
-#    usage
+    usage: "name1,...,nameN"
   .} : seq[string]
 
   enclose {.
     help: "Enclose the output"
-#    usage: "brackets"
+    usage: "brackets"
   .} : Enclose
 
   emoji {.
     help: "Use emojis in salutation"
+    usage: "happy,world,fire,wave"
   .} : seq[Emojis]
 
 
@@ -54,7 +56,7 @@ discard cli.parseOptions(commandLineParams())
 let configuration = cli.config()
 
 
-for arg in cli.unknownArgs():
+for arg in cli.unknownOptions():
   echo "Warning: unknown argument: ", arg
 
 for config in cli.unknownConfigs():
@@ -87,4 +89,5 @@ for i in 0..<configuration.times:
   let emoji = configuration.emoji.mapIt(emojis[it]).join("")
   echo open & salutation & emoji & close
 
+echo cli.generateUsage()
 echo cli.generateConfig()

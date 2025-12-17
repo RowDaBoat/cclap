@@ -5,10 +5,19 @@ import config
 import tables
 import sequtils
 import strutils
+import options
 
 
-proc generateUsage*(namesInOrder: seq[string]): string =
-  discard
+proc generateUsage*(program: string, namesInOrder: seq[string], definitions: Table[string, Config]): string =
+  result = "Usage: " & program
+
+  for name in namesInOrder:
+    var config = definitions[name]
+
+    if config.usage.isSome and config.usage.get == "":
+      result &= " --" & config.long
+    elif config.usage.isSome:
+      result &= " --" & config.long & "=" & config.usage.get
 
 
 proc generateConfig*(namesInOrder: seq[string], definitions: Table[string, Config]): string =

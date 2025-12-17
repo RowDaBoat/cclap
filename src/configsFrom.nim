@@ -4,6 +4,7 @@
 import tables
 import macros
 import config
+import options
 
 
 proc getTypeDef(T: NimNode): NimNode =
@@ -80,10 +81,22 @@ proc getMode(pragma: NimNode): Mode =
   else: error "cclap: invalid mode pragma value '" & modeStr & "'"
 
 
-proc processPragmas(pragmas: NimNode): (string, char, Mode) =
+proc getUsage(pragma: NimNode): Option[string] =
+  if (pragma.kind != nnkCall and pragma.kind != nnkExprColonExpr) or pragma.len > 2:
+    error "cclap: usage pragma must have a single string argument or none"
+
+  let usageText = pragma[1]
+  if not (usageText.kind == nnkStrLit):
+    error "cclap: usage pragma must have a single string argument or none"
+
+  result = if pragma.len == 1: none[string]() else: some(usageText.strVal)
+
+
+proc processPragmas(pragmas: NimNode): (string, char, Mode, Option[string]) =
   var helpText = ""
   var shortOpt = '\0'
   var mode = Mode.both
+  var usage = none[string]()
 
   for pragma in pragmas:
     if $pragma[0] == "help":
@@ -92,8 +105,10 @@ proc processPragmas(pragmas: NimNode): (string, char, Mode) =
       shortOpt = getShortOption(pragma)
     elif $pragma[0] == "mode":
       mode = getMode(pragma)
+    elif $pragma[0] == "usage":
+      usage = getUsage(pragma)
 
-  return (helpText, shortOpt, mode)
+  return (helpText, shortOpt, mode, usage)
 
 
 proc configFrom(configs: NimNode, field: NimNode): NimNode =
@@ -102,16 +117,18 @@ proc configFrom(configs: NimNode, field: NimNode): NimNode =
   var helpText = ""
   var shortOpt = '\0'
   var mode = Mode.both
+  var usage = none[string]()
 
   if pragmas != nil and pragmas.kind == nnkPragma:
-    (helpText, shortOpt, mode) = processPragmas(pragmas)
+    (helpText, shortOpt, mode, usage) = processPragmas(pragmas)
 
   result = quote do:
     `configs`.add(Config(
       long: `fieldName`,
       short: `shortOpt`,
       help: `helpText`,
-      mode: `mode`
+      mode: `mode`,
+      usage: `usage`
     ))
 
 

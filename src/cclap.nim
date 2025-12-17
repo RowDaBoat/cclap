@@ -11,7 +11,10 @@ import configsFrom
 import config
 import generators
 import errors
+import os
+
 export Mode
+
 
 type Cclap*[T] = object
   namesInOrder: seq[string]
@@ -31,6 +34,10 @@ template shortOption*(opt: char) {.pragma.}
 
 template mode*(mode: Mode) {.pragma.}
   ## Mode pragma for the configuration field.
+
+
+template usage*(usage: string) {.pragma.}
+  ## Usage example for the configuration field.
 
 
 proc parseLongOption(arg: string, args: var Table[string, string]) =
@@ -251,6 +258,12 @@ proc unknownConfigs*[T](self: var Cclap[T]): seq[string] =
   for config in self.configs.keys:
     if not (config in self.configDefinitions):
       result.add(config)
+
+
+proc generateUsage*[T: object](self: Cclap[T]): string =
+  ## Generate a usage message for the defined command line options.
+  let program = splitFile(getAppFileName()).name
+  generateUsage(program, self.namesInOrder, self.configDefinitions)
 
 
 proc generateConfig*[T: object](self: Cclap[T]): string =
