@@ -11,14 +11,14 @@ proc getTypeDef(T: NimNode): NimNode =
   result = getTypeInst(T)[1].getImpl
 
   if result.kind != nnkTypeDef:
-    error "cclap: the provided type is not an object."
+    error "cliquet: the provided type is not an object."
 
 
 proc getObjDef(typeDef: NimNode): NimNode =
   result = typeDef[2]
 
   if result.kind != nnkObjectTy:
-    error "cclap: the provided type is not an object."
+    error "cliquet: the provided type is not an object."
 
 
 proc getFields(T: NimNode): NimNode =
@@ -38,56 +38,56 @@ proc namesAndPragmas(field: NimNode): (NimNode, NimNode) =
 
 proc getFieldName(names: NimNode): string =
   if names.kind != nnkIdent:
-    error "cclap: only a single name per field is allowed in the configuration object."
+    error "cliquet: only a single name per field is allowed in the configuration object."
 
   result = $names
 
 
 proc getHelp(pragma: NimNode): string =
   if (pragma.kind != nnkCall and pragma.kind != nnkExprColonExpr) or pragma.len != 2:
-    error "cclap: help pragma must have a single argument"
+    error "cliquet: help pragma must have a single argument"
 
   let helpMsg = pragma[1]
   if not (helpMsg.kind in {nnkStrLit, nnkRStrLit, nnkTripleStrLit}):
-    error "cclap: help pragma must have a string argument"
+    error "cliquet: help pragma must have a string argument"
 
   result = helpMsg.strVal
 
 
 proc getShortOption(pragma: NimNode): char =
   if (pragma.kind != nnkCall and pragma.kind != nnkExprColonExpr) or pragma.len != 2:
-    error "cclap: shortOption pragma must have a single argument"
+    error "cliquet: shortOption pragma must have a single argument"
 
   let shortOptChar = pragma[1]
   if not (shortOptChar.kind == nnkCharLit):
-    error "cclap: shortOption pragma must have a char literal argument"
+    error "cliquet: shortOption pragma must have a char literal argument"
 
   result = chr(shortOptChar.intVal)
 
 
 proc getMode(pragma: NimNode): Mode =
   if (pragma.kind != nnkCall and pragma.kind != nnkExprColonExpr) or pragma.len != 2:
-    error "cclap: mode pragma must have a single argument"
+    error "cliquet: mode pragma must have a single argument"
 
   let modeNode = pragma[1]
   if modeNode.kind != nnkSym:
-    error "cclap: mode pragma must be an enum value, " & $modeNode.kind
+    error "cliquet: mode pragma must be an enum value, " & $modeNode.kind
 
   let modeStr = $modeNode
   case modeStr
   of "option": result = Mode.option
   of "config": result = Mode.config
   of "both": result = Mode.both
-  else: error "cclap: invalid mode pragma value '" & modeStr & "'"
+  else: error "cliquet: invalid mode pragma value '" & modeStr & "'"
 
 
 proc getUsage(pragma: NimNode): Option[string] =
   if (pragma.kind != nnkCall and pragma.kind != nnkExprColonExpr) or pragma.len > 2:
-    error "cclap: usage pragma must have a single string argument or none"
+    error "cliquet: usage pragma must have a single string argument or none"
 
   let usageText = pragma[1]
   if not (usageText.kind == nnkStrLit):
-    error "cclap: usage pragma must have a single string argument or none"
+    error "cliquet: usage pragma must have a single string argument or none"
 
   result = if pragma.len == 1: none[string]() else: some(usageText.strVal)
 

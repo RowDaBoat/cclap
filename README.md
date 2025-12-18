@@ -1,17 +1,18 @@
-# cclap - Configuration and Command Line Arguments Parser
+# Cliquet
+A tool for building CLI applications.
 
-From a single configuration object definition, `cclap` can:
+From a single configuration object definition, `cliquet` can:
 - parse options from command line arguments in long (`--opt`) and short (`-o`) forms.
 - parse settings from a configuration file.
 - get defaults from an instance of the configuration object.
 - get a merged configuration object prioritizing in the following order: command line arguments, configurations, and defaults.
 - build a help message detailing each option, their types, default values, and usage.
 
-`cclap` is not designed to take over, resolve, and/or automate every possible use case of a command line application, but rather serves as a non-intrusive tool to simplify the creation of one.
+`cliquet` is not designed to take over, resolve, and/or automate every possible use case of a command line application, but rather serves as a non-intrusive tool to simplify the creation of one.
 
 
 ## Documentation
-The API reference is available [here](https://rowdaboat.github.io/cclap/).
+The API reference is available [here](https://rowdaboat.github.io/cliquet/).
 
 
 ### Usage
@@ -28,7 +29,7 @@ type Configuration = object
   short   {.help: "Short options", shortOption: 's'.} : bool
 ```
 ```nim
-# Initialize `cclap` with the default settings
+# Initialize `cliquet` with the default settings
 let defaults = Configuration(
   flag: false,
   str: "Hello",
@@ -38,11 +39,11 @@ let defaults = Configuration(
   short: false
 )
 
-var cclap = initCclap(defaults)
+var cliquet = initCliquet(defaults)
 ```
 ```nim
 # Command line arguments are parsed up to the first non-option argument, returning the remaining ones
-let remainingArgs = cclap.parseOptions(commandLineParams())
+let remainingArgs = cliquet.parseOptions(commandLineParams())
 ```
 ```bash
 # A command line for this example looks like this
@@ -50,7 +51,7 @@ let remainingArgs = cclap.parseOptions(commandLineParams())
 ```
 ```nim
 # Parse configurations, typically obtained from a configuration file
-cclap.parseConfig(readFile("config.ini"))
+cliquet.parseConfig(readFile("config.ini"))
 ```
 ```ini
 # A configuration file for this example looks like this
@@ -64,12 +65,12 @@ short
 ```
 ```nim
 # Get the final merged configuration object
-let configuration = cclap.generateConfig()
+let configuration = cliquet.generateConfig()
 ```
 
 ```nim
 # Get a help message for the defined configuration
-let help = cclap.generateHelp()
+let help = cliquet.generateHelp()
 ```
 ```
 # The help message looks like this:

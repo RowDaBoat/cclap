@@ -17,7 +17,7 @@ import errors
 export Mode
 
 
-type Cclap*[T] = object
+type Cliquet*[T] = object
   namesInOrder: seq[string]
   configDefinitions: Table[string, Config]
   default: T
@@ -115,7 +115,7 @@ proc setFieldValue[T](name: string, fieldValue: var T, strValue: string, source:
   elif fieldValue is seq[string]:
     fieldValue = stripped.split(",").mapIt(it.strip)
   else:
-    {.error: "cclap: '" & $typeof(fieldValue) & "' is not supported for field: '" & name & "'."}
+    {.error: "cliquet: '" & $typeof(fieldValue) & "' is not supported for field: '" & name & "'."}
 
 
 proc stringType[T](value: T): string =
@@ -150,8 +150,8 @@ proc stringDefault[T](value: T): string =
     return $value
 
 
-proc initCclap*[T: object](default: T = default(T)): Cclap[T] =
-  ## Initialize Cclap, optionally with the default configurations.
+proc initCliquet*[T: object](default: T = default(T)): Cliquet[T] =
+  ## Initialize Cliquet, optionally with the default configurations.
 
   var namesInOrder: seq[string]
   let configs = configsFrom(T)
@@ -159,7 +159,7 @@ proc initCclap*[T: object](default: T = default(T)): Cclap[T] =
 
   for name, value in default.fieldPairs:
     when not (value is bool | int | float | enum | string | seq[bool] | seq[int] | seq[float] | seq[enum] | seq[string]):
-      {.error: "cclap: '" & $typeof(value) & "' is not supported for field: '" & name & "'."}
+      {.error: "cliquet: '" & $typeof(value) & "' is not supported for field: '" & name & "'."}
 
   for config in configs:
     namesInOrder.add(config.long)
@@ -169,14 +169,14 @@ proc initCclap*[T: object](default: T = default(T)): Cclap[T] =
     configsTable[name].typ = stringType(val)
     configsTable[name].default = stringDefault(val)
 
-  result = Cclap[T](
+  result = Cliquet[T](
     namesInOrder: namesInOrder,
     configDefinitions: configsTable,
     default: default
   )
 
 
-proc parseOptions*[T: object](self: var Cclap[T], args: seq[string]): seq[string] =
+proc parseOptions*[T: object](self: var Cliquet[T], args: seq[string]): seq[string] =
   ## Parse command line options, the result is the remaining arguments from the first non-option argument.
   ## raises an `InvalidShortOptions` error if the short options are ill-formed ex: -abc=def.
 
@@ -199,7 +199,7 @@ proc parseOptions*[T: object](self: var Cclap[T], args: seq[string]): seq[string
   return remaining
 
 
-proc parseConfig*[T: object](self: var Cclap[T], config: string) =
+proc parseConfig*[T: object](self: var Cliquet[T], config: string) =
   ## Parse configurations from a string.
   ## The config string is a list of key=value pairs separated by newlines.
   ## The `config` parameter is usually the contents of a configuration file.
@@ -221,7 +221,7 @@ proc parseConfig*[T: object](self: var Cclap[T], config: string) =
       self.configs[name] = config[1].strip
 
 
-proc checkRequirement*[T: object](self: var Cclap[T], definition: Config): bool =
+proc checkRequirement*[T: object](self: var Cliquet[T], definition: Config): bool =
   let long = definition.long
   let short = $definition.short
 
@@ -241,7 +241,7 @@ proc checkRequirement*[T: object](self: var Cclap[T], definition: Config): bool 
   result = satisfiedOption or satisfiedConfig or satisfiedBoth
 
 
-proc config*[T: object](self: var Cclap[T]): T =
+proc config*[T: object](self: var Cliquet[T]): T =
   ## Get the parsed configurations into a configuration object.
   ## Arguments, configurations and defaults, are merged in that order of priority.
   ## raises an `InvalidValue` error if an option of an argument or configuration is not valid for the field type.
@@ -269,7 +269,7 @@ proc config*[T: object](self: var Cclap[T]): T =
     setFieldValue(name, value, stringValue, source)
 
 
-proc unknownOptions*[T](self: var Cclap[T]): seq[string] =
+proc unknownOptions*[T](self: var Cliquet[T]): seq[string] =
   ## Get the user's arguments that are not listed as options in the configuration object.
 
   let optionModes = { Mode.option, Mode.both }
@@ -284,7 +284,7 @@ proc unknownOptions*[T](self: var Cclap[T]): seq[string] =
       result.add(arg)
 
 
-proc unknownConfigs*[T](self: var Cclap[T]): seq[string] =
+proc unknownConfigs*[T](self: var Cliquet[T]): seq[string] =
   ## Get the user's configurations that do not belong to the configuration object.
 
   let configModes = { Mode.config, Mode.both }
@@ -298,7 +298,7 @@ proc unknownConfigs*[T](self: var Cclap[T]): seq[string] =
       result.add(arg)
 
 
-proc unmetRequirments*[T](self: var Cclap[T]): seq[string] =
+proc unmetRequirments*[T](self: var Cliquet[T]): seq[string] =
   ## Get the user's arguments that are required but not provided.
 
   for definition in self.configDefinitions.values:
@@ -306,17 +306,17 @@ proc unmetRequirments*[T](self: var Cclap[T]): seq[string] =
       result.add(definition.long)
 
 
-proc generateUsage*[T: object](self: Cclap[T]): string =
+proc generateUsage*[T: object](self: Cliquet[T]): string =
   ## Generate a usage message for the defined command line options.
   let program = splitFile(getAppFileName()).name
   generateUsage(program, self.namesInOrder, self.configDefinitions)
 
 
-proc generateConfig*[T: object](self: Cclap[T]): string =
+proc generateConfig*[T: object](self: Cliquet[T]): string =
   ## Generate a default configuration file for the defined settings.
   generateConfig(self.namesInOrder, self.configDefinitions)
 
 
-proc generateHelp*[T: object](self: Cclap[T]): string =
+proc generateHelp*[T: object](self: Cliquet[T]): string =
   ## Generate a help message for the defined command line options. 
   generateHelp(self.namesInOrder, self.configDefinitions)

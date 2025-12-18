@@ -1,7 +1,7 @@
-packageName   = "cclap"
+packageName   = "cliquet"
 version       = "0.0.1"
 author        = "RowDaBoat"
-description   = "Configuration and Command Line Arguments Parser"
+description   = "A tool for building CLI applications."
 license       = "ISC"
 
 srcDir        = "src"
@@ -14,4 +14,4 @@ task examples, "Build examples":
   exec "nim c src/examples/example.nim"
 
 task docs, "Generate documentation":
-  exec "nim doc --project --git.url:git@github.com:RowDaBoat/cclap.git --index:on --outdir:docs src/cclap.nim"
+  exec "nim doc --project --git.url:git@github.com:RowDaBoat/cliquet.git --index:on --outdir:docs src/cliquet.nim"

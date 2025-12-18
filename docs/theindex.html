@@ -25,10 +25,14 @@
   <div class="document" id="documentId">
     <div class="container">
       <h1 class="title">Index</h1>
-      Modules: <a href="cclap.html">cclap</a>, <a href="clip.html">clip</a>, <a href="config.html">config</a>, <a href="configsFrom.html">configsFrom</a>, <a href="errors.html">errors</a>, <a href="help.html">help</a>.<br/><p /><h2>API symbols</h2>
+      Modules: <a href="cclap.html">cclap</a>, <a href="clip.html">clip</a>, <a href="cliquet.html">cliquet</a>, <a href="config.html">config</a>, <a href="configsFrom.html">configsFrom</a>, <a href="errors.html">errors</a>, <a href="generators.html">generators</a>, <a href="help.html">help</a>.<br/><p /><h2>API symbols</h2>
 <dl><dt><a name="Args" href="#Args"><span>Args:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="config: ConfigSource.Args" href="config.html#Args">config: ConfigSource.Args</a></li>
+          </ul></dd>
+<dt><a name="both" href="#both"><span>both:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="config: Mode.both" href="config.html#both">config: Mode.both</a></li>
           </ul></dd>
 <dt><a name="buildHelp" href="#buildHelp"><span>buildHelp:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -38,19 +42,31 @@
 <li><a class="reference external"
           data-doc-search-tag="cclap: object Cclap" href="cclap.html#Cclap">cclap: object Cclap</a></li>
           </ul></dd>
+<dt><a name="checkRequirement" href="#checkRequirement"><span>checkRequirement:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: proc checkRequirement[T: object](self: var Cliquet[T]; definition: Config): bool" href="cliquet.html#checkRequirement%2CCliquet%5BT%3A%20object%5D%2CConfig">cliquet: proc checkRequirement[T: object](self: var Cliquet[T]; definition: Config): bool</a></li>
+          </ul></dd>
 <dt><a name="Clip" href="#Clip"><span>Clip:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="clip: object Clip" href="clip.html#Clip">clip: object Clip</a></li>
+          </ul></dd>
+<dt><a name="Cliquet" href="#Cliquet"><span>Cliquet:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: object Cliquet" href="cliquet.html#Cliquet">cliquet: object Cliquet</a></li>
           </ul></dd>
 <dt><a name="config" href="#config"><span>config:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="cclap: proc config[T: object](self: var Cclap[T]): T" href="cclap.html#config%2CCclap%5BT%3A%20object%5D">cclap: proc config[T: object](self: var Cclap[T]): T</a></li>
           <li><a class="reference external"
           data-doc-search-tag="clip: proc config[T: object](self: var Clip[T]): T" href="clip.html#config%2CClip%5BT%3A%20object%5D">clip: proc config[T: object](self: var Clip[T]): T</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="cliquet: proc config[T: object](self: var Cliquet[T]): T" href="cliquet.html#config%2CCliquet%5BT%3A%20object%5D">cliquet: proc config[T: object](self: var Cliquet[T]): T</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="config: Mode.config" href="config.html#config">config: Mode.config</a></li>
           </ul></dd>
 <dt><a name="Config" href="#Config"><span>Config:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
-          data-doc-search-tag="config: object Config" href="config.html#Config">config: object Config</a></li>
+          data-doc-search-tag="config: object Config" href="config.html#Config_2">config: object Config</a></li>
           </ul></dd>
 <dt><a name="ConfigFile" href="#ConfigFile"><span>ConfigFile:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -68,6 +84,26 @@
 <li><a class="reference external"
           data-doc-search-tag="config: ConfigSource.Default" href="config.html#Default">config: ConfigSource.Default</a></li>
           </ul></dd>
+<dt><a name="generateConfig" href="#generateConfig"><span>generateConfig:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: proc generateConfig[T: object](self: Cliquet[T]): string" href="cliquet.html#generateConfig%2CCliquet%5BT%3A%20object%5D">cliquet: proc generateConfig[T: object](self: Cliquet[T]): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="generators: proc generateConfig(namesInOrder: seq[string]; definitions: Table[string, Config]): string" href="generators.html#generateConfig%2Cseq%5Bstring%5D%2CTable%5Bstring%2CConfig%5D">generators: proc generateConfig(namesInOrder: seq[string]; definitions: Table[string, Config]): string</a></li>
+          </ul></dd>
+<dt><a name="generateHelp" href="#generateHelp"><span>generateHelp:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: proc generateHelp[T: object](self: Cliquet[T]): string" href="cliquet.html#generateHelp%2CCliquet%5BT%3A%20object%5D">cliquet: proc generateHelp[T: object](self: Cliquet[T]): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="generators: proc generateHelp(namesInOrder: seq[string]; definitions: Table[string, Config]): string" href="generators.html#generateHelp%2Cseq%5Bstring%5D%2CTable%5Bstring%2CConfig%5D">generators: proc generateHelp(namesInOrder: seq[string]; definitions: Table[string, Config]): string</a></li>
+          </ul></dd>
+<dt><a name="generateUsage" href="#generateUsage"><span>generateUsage:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: proc generateUsage[T: object](self: Cliquet[T]): string" href="cliquet.html#generateUsage%2CCliquet%5BT%3A%20object%5D">cliquet: proc generateUsage[T: object](self: Cliquet[T]): string</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="generators: proc generateUsage(program: string; namesInOrder: seq[string];
+              definitions: Table[string, Config]): string" href="generators.html#generateUsage%2Cstring%2Cseq%5Bstring%5D%2CTable%5Bstring%2CConfig%5D">generators: proc generateUsage(program: string; namesInOrder: seq[string];
+              definitions: Table[string, Config]): string</a></li>
+          </ul></dd>
 <dt><a name="help" href="#help"><span>help:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="cclap: proc help[T: object](self: Cclap[T]): string" href="cclap.html#help%2CCclap%5BT%3A%20object%5D">cclap: proc help[T: object](self: Cclap[T]): string</a></li>
@@ -77,6 +113,8 @@
           data-doc-search-tag="clip: proc help[T: object](self: Clip[T]): string" href="clip.html#help%2CClip%5BT%3A%20object%5D">clip: proc help[T: object](self: Clip[T]): string</a></li>
           <li><a class="reference external"
           data-doc-search-tag="clip: template help(message: string)" href="clip.html#help.t%2Cstring">clip: template help(message: string)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="cliquet: template help(message: string)" href="cliquet.html#help.t%2Cstring">cliquet: template help(message: string)</a></li>
           </ul></dd>
 <dt><a name="initCclap" href="#initCclap"><span>initCclap:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -85,6 +123,10 @@
 <dt><a name="initClip" href="#initClip"><span>initClip:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="clip: proc initClip[T: object](default: T = default(T)): Clip[T]" href="clip.html#initClip%2CT">clip: proc initClip[T: object](default: T = default(T)): Clip[T]</a></li>
+          </ul></dd>
+<dt><a name="initCliquet" href="#initCliquet"><span>initCliquet:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: proc initCliquet[T: object](default: T = default(T)): Cliquet[T]" href="cliquet.html#initCliquet%2CT">cliquet: proc initCliquet[T: object](default: T = default(T)): Cliquet[T]</a></li>
           </ul></dd>
 <dt><a name="invalidShortOptions" href="#invalidShortOptions"><span>invalidShortOptions:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -104,6 +146,18 @@
 <li><a class="reference external"
           data-doc-search-tag="errors: object InvalidValueError" href="errors.html#InvalidValueError">errors: object InvalidValueError</a></li>
           </ul></dd>
+<dt><a name="mode" href="#mode"><span>mode:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: template mode(mode: Mode)" href="cliquet.html#mode.t%2CMode">cliquet: template mode(mode: Mode)</a></li>
+          </ul></dd>
+<dt><a name="Mode" href="#Mode"><span>Mode:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="config: enum Mode" href="config.html#Mode">config: enum Mode</a></li>
+          </ul></dd>
+<dt><a name="option" href="#option"><span>option:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="config: Mode.option" href="config.html#option">config: Mode.option</a></li>
+          </ul></dd>
 <dt><a name="parseArgs" href="#parseArgs"><span>parseArgs:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="cclap: proc parseArgs[T: object](self: var Cclap[T]; args: seq[string]): seq[string]" href="cclap.html#parseArgs%2CCclap%5BT%3A%20object%5D%2Cseq%5Bstring%5D">cclap: proc parseArgs[T: object](self: var Cclap[T]; args: seq[string]): seq[string]</a></li>
@@ -117,12 +171,24 @@
 <dt><a name="parseConfig" href="#parseConfig"><span>parseConfig:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="cclap: proc parseConfig[T: object](self: var Cclap[T]; config: string)" href="cclap.html#parseConfig%2CCclap%5BT%3A%20object%5D%2Cstring">cclap: proc parseConfig[T: object](self: var Cclap[T]; config: string)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="cliquet: proc parseConfig[T: object](self: var Cliquet[T]; config: string)" href="cliquet.html#parseConfig%2CCliquet%5BT%3A%20object%5D%2Cstring">cliquet: proc parseConfig[T: object](self: var Cliquet[T]; config: string)</a></li>
+          </ul></dd>
+<dt><a name="parseOptions" href="#parseOptions"><span>parseOptions:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: proc parseOptions[T: object](self: var Cliquet[T]; args: seq[string]): seq[string]" href="cliquet.html#parseOptions%2CCliquet%5BT%3A%20object%5D%2Cseq%5Bstring%5D">cliquet: proc parseOptions[T: object](self: var Cliquet[T]; args: seq[string]): seq[string]</a></li>
+          </ul></dd>
+<dt><a name="required" href="#required"><span>required:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: template required()" href="cliquet.html#required.t">cliquet: template required()</a></li>
           </ul></dd>
 <dt><a name="shortOption" href="#shortOption"><span>shortOption:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
           data-doc-search-tag="cclap: template shortOption(opt: char)" href="cclap.html#shortOption.t%2Cchar">cclap: template shortOption(opt: char)</a></li>
           <li><a class="reference external"
           data-doc-search-tag="clip: template shortOption(opt: char)" href="clip.html#shortOption.t%2Cchar">clip: template shortOption(opt: char)</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="cliquet: template shortOption(opt: char)" href="cliquet.html#shortOption.t%2Cchar">cliquet: template shortOption(opt: char)</a></li>
           </ul></dd>
 <dt><a name="typeNotSupported" href="#typeNotSupported"><span>typeNotSupported:</span></a></dt><dd><ul class="simple">
 <li><a class="reference external"
@@ -139,12 +205,26 @@
           data-doc-search-tag="cclap: proc unknownConfigs[T](self: var Cclap[T]): seq[string]" href="cclap.html#unknownConfigs%2CCclap%5BT%5D">cclap: proc unknownConfigs[T](self: var Cclap[T]): seq[string]</a></li>
           <li><a class="reference external"
           data-doc-search-tag="clip: proc unknownConfigs[T](self: var Clip[T]): seq[string]" href="clip.html#unknownConfigs%2CClip%5BT%5D">clip: proc unknownConfigs[T](self: var Clip[T]): seq[string]</a></li>
+          <li><a class="reference external"
+          data-doc-search-tag="cliquet: proc unknownConfigs[T](self: var Cliquet[T]): seq[string]" href="cliquet.html#unknownConfigs%2CCliquet%5BT%5D">cliquet: proc unknownConfigs[T](self: var Cliquet[T]): seq[string]</a></li>
+          </ul></dd>
+<dt><a name="unknownOptions" href="#unknownOptions"><span>unknownOptions:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: proc unknownOptions[T](self: var Cliquet[T]): seq[string]" href="cliquet.html#unknownOptions%2CCliquet%5BT%5D">cliquet: proc unknownOptions[T](self: var Cliquet[T]): seq[string]</a></li>
+          </ul></dd>
+<dt><a name="unmetRequirments" href="#unmetRequirments"><span>unmetRequirments:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: proc unmetRequirments[T](self: var Cliquet[T]): seq[string]" href="cliquet.html#unmetRequirments%2CCliquet%5BT%5D">cliquet: proc unmetRequirments[T](self: var Cliquet[T]): seq[string]</a></li>
+          </ul></dd>
+<dt><a name="usage" href="#usage"><span>usage:</span></a></dt><dd><ul class="simple">
+<li><a class="reference external"
+          data-doc-search-tag="cliquet: template usage(usage: string)" href="cliquet.html#usage.t%2Cstring">cliquet: template usage(usage: string)</a></li>
           </ul></dd>
 </dl>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br>
-        <small style="color: var(--hint);">Made with Nim. Generated: 2025-12-14 16:42:01 UTC</small>
+        <small style="color: var(--hint);">Made with Nim. Generated: 2025-12-17 22:33:11 UTC</small>
       </div>
     </div>
   </div>

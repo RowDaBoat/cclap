@@ -17,7 +17,7 @@ type InvalidValueError* = object of ValueError
 
 proc invalidShortOptions*(arg: string) =
   raise (ref InvalidShortOptionsError)(
-    msg: fmt"cclap: invalid short form arguments: '{arg}'",
+    msg: fmt"cliquet: invalid short form arguments: '{arg}'",
     arg: arg
   )
 
@@ -25,7 +25,7 @@ proc invalidShortOptions*(arg: string) =
 proc invalidValue*(configName: string, value: string, chosen: ConfigSource, expected: string) =
   let typ = if chosen == Args: "argument" else: "configuration"
   raise (ref InvalidValueError)(
-    msg: fmt"cclap: invalid value for {typ} '{configName}': '{value}' {expected}",
+    msg: fmt"cliquet: invalid value for {typ} '{configName}': '{value}' {expected}",
     configName: configName,
     value: value,
     chosen: chosen,
@@ -34,4 +34,4 @@ proc invalidValue*(configName: string, value: string, chosen: ConfigSource, expe
 
 
 proc typeNotSupported*(typename: string) =
-  raise newException(ValueError, fmt"cclap: type '{typename}' is not supported, this is a bug.")
+  raise newException(ValueError, fmt"cliquet: type '{typename}' is not supported, this is a bug.")

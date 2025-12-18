@@ -1,7 +1,7 @@
 # ISC License
 # Copyright (c) 2025 RowDaBoat
 
-import ../cclap
+import ../cliquet
 import strutils
 import os
 import tables
@@ -46,7 +46,7 @@ type Configuration = object
   .} : seq[Emojis]
 
 
-var cli = initCclap(Configuration(
+var cli = initCliquet(Configuration(
   uppercase: false,
   times: 5,
   name: @["world"],

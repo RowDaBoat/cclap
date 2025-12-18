@@ -1,2 +1,2 @@
 nimTitle	configsFrom	configsFrom.html	module src/configsFrom		0
-nim	configsFrom	configsFrom.html#configsFrom.m,typedesc	macro configsFrom(T: typedesc): untyped		98
+nim	configsFrom	configsFrom.html#configsFrom.m,typedesc	macro configsFrom(T: typedesc): untyped		140
