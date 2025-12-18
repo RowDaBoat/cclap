@@ -1,7 +1,6 @@
 # Cliquet
-A tool for building CLI applications.
 
-From a single configuration object definition, `cliquet` can:
+`cliquet` is a tool for building CLI applications from a single configuration object definition, it can:
 - parse options from command line arguments in long (`--opt`) and short (`-o`) forms.
 - parse settings from a configuration file.
 - get defaults from an instance of the configuration object.
